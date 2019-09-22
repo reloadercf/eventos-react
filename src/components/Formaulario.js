@@ -1,15 +1,31 @@
 import React, { Component } from 'react';
 
 import {CategoriasConsumer} from './context/CategoriasContext'
+import {EventosConsumer} from './context/EventosContext'
 
 class Formulario extends Component {
     state = { 
         nombre:'',
         categoria:'',
 }
+//Si el usuario agrega un evento o categoria
+obtenerDatosEvento=e=>{
+    this.setState({
+        [e.target.name]:e.target.value
+    })
+}
     render() { 
         return ( 
-            <form>
+            <EventosConsumer>
+                {(value)=>{
+                    console.log(value)
+                    return(
+            <form
+            onSubmit={(e)=>{
+                e.preventDefault();
+                value.obtenerEventos(this.state)
+            }}
+            >
                 <fieldset className='uk-fieldset uk-margin'>
                     <legend className='ul-legend uk-text-center'>
                         Busca tu evento por nombre o Categoria
@@ -22,6 +38,7 @@ class Formulario extends Component {
                             className='uk-input'
                             type='text'
                             placeholder='Nombre de evento o ciudad'
+                            onChange={this.obtenerDatosEvento}
                         />
                     </div>
 
@@ -29,6 +46,7 @@ class Formulario extends Component {
                         <select
                         className='uk-select'
                         name='categoria'
+                        onChange={this.obtenerDatosEvento}
                         >
                             <CategoriasConsumer>
                                {(value)=>{
@@ -50,6 +68,9 @@ class Formulario extends Component {
                     </div>
                 </div>
             </form>
+            )//cierra de arriva
+            }}
+            </EventosConsumer>
          );
     }
 }
